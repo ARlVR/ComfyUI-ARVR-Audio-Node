@@ -1,6 +1,6 @@
 """
 @title: ComfyUI ARVR Audio Node
-@author: Seu Nome
+@author: ARVR
 @description: Node para gerenciamento de áudio no ComfyUI
 """
 
