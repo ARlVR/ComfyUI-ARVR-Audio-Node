@@ -90,14 +90,18 @@ class AudioManagerNode:
             # Adicionar metadados se fornecidos
             if metadata:
                 try:
-                    import taglib
-                    audio_file = taglib.File(file_path)
+                    from mutagen import File
+                    audio_file = File(file_path)
                     metadata_dict = eval(metadata)
-                    for key, value in metadata_dict.items():
-                        audio_file.tags[key] = [str(value)]
-                    audio_file.save()
+                    if audio_file is not None:
+                        for key, value in metadata_dict.items():
+                            if hasattr(audio_file.tags, 'add'):
+                                audio_file.tags.add(key, str(value))
+                            else:
+                                audio_file[key] = str(value)
+                        audio_file.save()
                 except ImportError:
-                    logger.warning("taglib não instalado. Metadados não foram salvos.")
+                    logger.warning("mutagen não instalado. Metadados não foram salvos.")
                 except Exception as e:
                     logger.error(f"Erro ao salvar metadados: {str(e)}")
             
